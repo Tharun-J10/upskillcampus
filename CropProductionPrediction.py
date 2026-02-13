@@ -1,16 +1,12 @@
-# CropProductionPrediction.py
-
 import pandas as pd
-import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, r2_score
 from sklearn.preprocessing import LabelEncoder
 
 # -----------------------------
-# Step 1: Create Sample Dataset
+# Sample Dataset
 # -----------------------------
-
 data = {
     "Crop": ["Rice", "Wheat", "Maize", "Rice", "Wheat", "Maize", "Rice", "Wheat"],
     "Season": ["Kharif", "Rabi", "Kharif", "Rabi", "Kharif", "Rabi", "Kharif", "Rabi"],
@@ -20,20 +16,14 @@ data = {
 
 df = pd.DataFrame(data)
 
-# -----------------------------
-# Step 2: Encode Categorical Data
-# -----------------------------
-
+# Encode categorical data
 le_crop = LabelEncoder()
 le_season = LabelEncoder()
 
 df["Crop"] = le_crop.fit_transform(df["Crop"])
 df["Season"] = le_season.fit_transform(df["Season"])
 
-# -----------------------------
-# Step 3: Split Data
-# -----------------------------
-
+# Split
 X = df[["Crop", "Season", "Cost_of_Cultivation"]]
 y = df["Production"]
 
@@ -41,36 +31,44 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# -----------------------------
-# Step 4: Train Model
-# -----------------------------
-
+# Train model
 model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
-# -----------------------------
-# Step 5: Evaluate Model
-# -----------------------------
-
+# Evaluate
 predictions = model.predict(X_test)
-
 mae = mean_absolute_error(y_test, predictions)
 r2 = r2_score(y_test, predictions)
 
-print("Model Evaluation:")
-print("Mean Absolute Error:", mae)
-print("R2 Score:", r2)
+print("\n===== MODEL PERFORMANCE =====")
+print(f"Mean Absolute Error: {mae:.2f}")
+print(f"R2 Score: {r2:.2f}")
+print("=============================\n")
 
 # -----------------------------
-# Step 6: Make Sample Prediction
+# Take User Input
 # -----------------------------
+print("Enter Crop Type (Rice/Wheat/Maize):")
+crop_input = input()
 
-sample_input = pd.DataFrame({
-    "Crop": [le_crop.transform(["Rice"])[0]],
-    "Season": [le_season.transform(["Kharif"])[0]],
-    "Cost_of_Cultivation": [25000]
+print("Enter Season (Kharif/Rabi):")
+season_input = input()
+
+print("Enter Cost of Cultivation:")
+cost_input = float(input())
+
+# Convert input
+crop_encoded = le_crop.transform([crop_input])[0]
+season_encoded = le_season.transform([season_input])[0]
+
+sample = pd.DataFrame({
+    "Crop": [crop_encoded],
+    "Season": [season_encoded],
+    "Cost_of_Cultivation": [cost_input]
 })
 
-predicted_production = model.predict(sample_input)
+prediction = model.predict(sample)
 
-print("\nPredicted Production for Sample Input:", predicted_production[0])
+print("\n===== PREDICTION RESULT =====")
+print(f"Predicted Crop Production: {prediction[0]:.2f} units")
+print("=============================")

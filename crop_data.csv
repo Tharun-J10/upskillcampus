@@ -1,0 +1,9 @@
+State,District,Crop,Season,Cost_of_Cultivation,Production
+Tamil Nadu,Tirupattur,Rice,Kharif,20000,50
+Tamil Nadu,Salem,Wheat,Rabi,18000,45
+Karnataka,Mysore,Maize,Kharif,15000,40
+Punjab,Ludhiana,Wheat,Rabi,22000,60
+Maharashtra,Pune,Soybean,Kharif,19000,55
+Tamil Nadu,Chennai,Sugarcane,Summer,25000,70
+Karnataka,Bangalore,Cotton,Kharif,22000,58
+Punjab,Amritsar,Barley,Rabi,16000,42
